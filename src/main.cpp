@@ -1,10 +1,8 @@
+#include <GL/gl.h>
 #include <GLFW/glfw3.h>
 #include <cmath>
 #include <iostream>
 #include <vector>
-
-#define widthS 500
-#define higthS 500
 
 float mnist_data[] = {
     5,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
@@ -61,8 +59,12 @@ float mnist_data[] = {
     0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
     0,   0,   0,   0,   0};
 
+#define widthS 500
+#define higthS 500
+
 std::vector<std::pair<double, double>> cursorPositions;
 bool drawAreaEnabled = true;
+std::vector<int> grid(785, 0);
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action,
                   int mods) {
@@ -73,9 +75,12 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action,
 
 void cursor_position_callback(GLFWwindow *window, double xpos, double ypos) {
   cursorPositions.push_back({xpos, ypos});
+  std::cout << "tamano mnist_data: "
+            << sizeof(mnist_data) / sizeof(mnist_data[0]) << std::endl;
   std::cout << "Posición del cursor: (" << xpos << ", " << ypos << ")"
             << std::endl;
 }
+
 void mouse_button_callback(GLFWwindow *window, int button, int action,
                            int mods) {
   if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
@@ -85,107 +90,61 @@ void mouse_button_callback(GLFWwindow *window, int button, int action,
   }
 }
 
-void drawPixel(GLFWwindow *window, int x, int y) {
-  glColor3f(0.0, 0.0, 0.0);
-  float px = -1.0 + ((x * 2.0) / 28.0); // Escala horizontalmente
-  float py = 1.0 - ((y * 2.0) / 28.0);  // Escala verticalmente
+void drawPixel(GLFWwindow *window, int x, int y, float colorPixel) {
+  float valorC = 1 - (colorPixel / 255);
+  glColor3f(valorC, valorC, valorC);
+  // glColor3f(250 - colorPixel, 250 - colorPixel, 250 - colorPixel);
+  float px = -1.0 + ((x * 2.0) / 28.0);
+  float py = 1.0 - ((y * 2.0) / 28.0);
   glBegin(GL_QUADS);
   glVertex2f(px, py);
   glVertex2f(px + (2.0 / 28.0), py);
   glVertex2f(px + (2.0 / 28.0), py - (2.0 / 28.0));
   glVertex2f(px, py - (2.0 / 28.0));
   glEnd();
+  // Calcula el índice en el array grid basado en las coordenadas x e y
+  int index = y * 28 + x;
+  // Marca el valor correspondiente en el array como 1 (pintado)
+  grid[index] = 1;
 }
-
-// void drawNumber(GLFWwindow *window) {
-//   glClear(GL_COLOR_BUFFER_BIT);
-//   glColor3f(0.0, 0.0, 0.0);
-//   for (int i = 0; i < sizeof(mnist_data) / sizeof(float); ++i) {
-//     double x = -1.0 + (i % 28) * (2.0 / 28);
-//     double y = 1.0 - (i / 28) * (2.0 / 28);
-//     if (mnist_data[i] > 0.5) {
-//       glBegin(GL_QUADS);
-//       glVertex2f(x, y);
-//       glVertex2f(x + (2.0 / 28), y);
-//       glVertex2f(x + (2.0 / 28), y - (2.0 / 28));
-//       glVertex2f(x, y - (2.0 / 28));
-//       glEnd();
-//     }
-//   }
-//   glColor3f(0.0, 0.0, 0.0);
-//   for (const auto &pos : cursorPositions) {
-//     float x = -1.0 + (pos.first / 800) * 2.0;
-//     float y = 1.0 - (pos.second / 800) * 2.0;
-//     glBegin(GL_QUADS);
-//     glVertex2f(x - 0.02, y - 0.02);
-//     glVertex2f(x + 0.02, y - 0.02);
-//     glVertex2f(x + 0.02, y + 0.02);
-//     glVertex2f(x - 0.02, y + 0.02);
-//     glEnd();
-//   }
-// }
 
 void drawNumber(GLFWwindow *window) {
   glClear(GL_COLOR_BUFFER_BIT);
   glColor3f(0.0, 0.0, 0.0);
+
+  // Itera sobre los datos del MNIST para dibujar los cuadrados pintados
   for (int i = 0; i < sizeof(mnist_data) / sizeof(float); ++i) {
     if (mnist_data[i] > 0.5) {
       int x = i % 28;
       int y = i / 28;
-      drawPixel(window, x, y);
+      drawPixel(window, x, y, mnist_data[i]);
     }
   }
+  // Itera sobre las posiciones del cursor para dibujar y actualizar el estado
+  // de pintado
   for (const auto &pos : cursorPositions) {
     float x = pos.first / higthS * 28.0f;
     float y = pos.second / widthS * 28.0f;
-    drawPixel(window, x, y);
+    drawPixel(window, x, y, 255);
   }
+  // Imprimir el array grid (opcional, para verificar)
+  // for (int i = 0; i < grid.size(); ++i) {
+  //   std::cout << grid[i] << " ";
+  //   if ((i + 1) % 28 == 0) {
+  //     std::cout << std::endl;
+  //   }
+  // }
 }
 
-// void drawNumber(GLFWwindow *window) {
-//   glClear(GL_COLOR_BUFFER_BIT);
-//   glColor3f(0.0, 0.0, 0.0);
-//
-//   for (int i = 0; i < sizeof(mnist_data) / sizeof(float); ++i) {
-//     double x = -1.0 + (i % 28) * (2.0 / 28);
-//     double y = 1.0 - (i / 28) * (2.0 / 28);
-//     if (mnist_data[i] > 0.5) {
-//       glBegin(GL_QUADS);
-//       glVertex2f(x, y);
-//       glVertex2f(x + (2.0 / 28), y);
-//       glVertex2f(x + (2.0 / 28), y - (2.0 / 28));
-//       glVertex2f(x, y - (2.0 / 28));
-//       glEnd();
-//     }
-//   }
-//
-//   glColor3f(0.0, 0.0, 0.0);
-//   for (const auto &pos : cursorPositions) {
-//     float x = -1.0 + (pos.first / 800) * 2.0;
-//     float y = 1.0 - (pos.second / 800) * 2.0;
-//     int gridX = static_cast<int>((x + 1.0) / (2.0 / 28));
-//     int gridY = static_cast<int>((1.0 - y) / (2.0 / 28));
-//     int dataIndex = gridY * 28 + gridX;
-//     if (dataIndex >= 0 && dataIndex < sizeof(mnist_data) / sizeof(float)) {
-//       if (mnist_data[dataIndex] > 0.5) {
-//         glBegin(GL_QUADS);
-//         glVertex2f(x, y);
-//         glVertex2f(x + (2.0 / 28), y);
-//         glVertex2f(x + (2.0 / 28), y - (2.0 / 28));
-//         glVertex2f(x, y - (2.0 / 28));
-//         glEnd();
-//       }
-//     }
-//   }
-// }
 void drawDrawArea(GLFWwindow *window) {
   if (drawAreaEnabled) {
     glColor3f(0.0, 0.0, 0.0);
+    glLineWidth(5);
     glBegin(GL_LINE_LOOP);
-    glVertex2f(-0.50, 1.0);
-    glVertex2f(0.0, 1.0);
-    glVertex2f(0.0, -0.50);
-    glVertex2f(-0.50, -0.50);
+    glVertex2f(-0.90, 0.90);
+    glVertex2f(0.0, 0.90);
+    glVertex2f(0.0, -0.90);
+    glVertex2f(-0.90, -0.90);
     glEnd();
   }
 }
