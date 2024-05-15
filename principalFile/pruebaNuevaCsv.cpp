@@ -182,3 +182,65 @@ int main() {
       multiplicarMatrices(valoresRpesos, numerosInput);
   return 0;
 }
+
+// otherFunction
+// std::vector<std::vector<float>>
+// multiplicarMatrices(const std::vector<std::vector<float>> &matriz1,
+//                     const std::vector<std::vector<float>> &matriz2) {
+//   float biasV = 1;
+//   int filas_matriz1 = matriz1.size();
+//   int columnas_matriz1 = matriz1[0].size();
+//   int filas_matriz2 = matriz2.size() - 1;
+//   int columnas_matriz2 = matriz2[0].size();
+//   cout << "Matriz 01 es : " << filas_matriz1 << " x " << columnas_matriz1
+//        << endl;
+//   cout << "Matriz 02 es: " << filas_matriz2 << " x " << columnas_matriz2
+//        << endl;
+//
+//   // Verificar que las matrices sean multiplicables
+//   if (columnas_matriz1 != filas_matriz2) {
+//     std::cerr << "Error: Las matrices no son compatibles para
+//     multiplicación."
+//               << std::endl;
+//     return std::vector<std::vector<float>>(); // Devolver matriz vacía en
+//     caso
+//                                               // de error
+//   }
+//
+//   // Crear la matriz resultado inicializada con ceros
+//   std::vector<std::vector<float>> resultado(
+//       filas_matriz1, std::vector<float>(columnas_matriz2, 0.0f));
+//   float opResult = 0.0f;
+//   // std::vector<std::vector<float>> resultadoTMP;
+//   std::vector<std::vector<double>> resultadoTMP(
+//       filas_matriz1, std::vector<double>(columnas_matriz2, 0.0));
+//
+//   // Realizar la multiplicación de matrices
+//   for (int i = 0; i < filas_matriz1; ++i) {
+//     for (int j = 0; j < columnas_matriz2; ++j) {
+//       opResult = 0.0f;
+//       double temp = 0.0f;
+//       for (int k = 0; k < columnas_matriz1; ++k) {
+//         // resultado[i][j] += matriz1[i][k] * matriz2[k][j + 1];
+//         temp = matriz1[i][k] * matriz2[k][j + 1];
+//         opResult += temp;
+//       }
+//       // resultado[i][j] += biasV;
+//       cout << "Un resultado es: " << resultado[i][j] << endl;
+//       cout << "Un es: " << opResult << endl;
+//       // vector<float> vectAdd = {opResult};
+//       // resultadoTMP.push_back(vectAdd);
+//       resultadoTMP[i][j] = opResult;
+//     }
+//     // resultado[i].push_back();
+//   }
+//
+//   for (int i = 0; i < resultado.size(); i++) {
+//     for (int j = 0; j < resultado[i].size(); j++) {
+//       // cout << resultado[i][j] << endl;
+//       cout << fixed << setprecision(8) << resultadoTMP[i][j] << endl;
+//     }
+//   }
+//
+//   return resultado;
+// }
