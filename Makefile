@@ -1,7 +1,7 @@
 # Variables
 CXX = g++
 CXXFLAGS = -std=c++11 -Wall
-LDFLAGS = -L${PWD}/lib/ -lglad -lglfw3 -lGL -lX11 -lpthread -lXrandr -lXi -ldl
+LDFLAGS = -L${PWD}/lib/ -lglad -lglfw3 -lglut -lGL -lGLU -lX11 -lpthread -lXrandr -lXi -ldl
 SRCDIR = src
 INCDIR = include
 BINDIR = bin
@@ -11,7 +11,8 @@ OBJS := $(SRCS:$(SRCDIR)/%.cpp=$(BINDIR)/%.o)
 
 # Regla principal
 $(BINDIR)/$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -I$(INCDIR) $^ -o $@ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -I$(INCDIR) $^ -o $(SRCDIR)/$(TARGET) $(LDFLAGS)
+	# $(CXX) $(CXXFLAGS) -I$(INCDIR) $^ -o $@ $(LDFLAGS)
 
 # Regla para compilar objetos
 $(BINDIR)/%.o: $(SRCDIR)/%.cpp | $(BINDIR)

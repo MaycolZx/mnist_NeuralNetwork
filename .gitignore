@@ -2,3 +2,4 @@
 /bin
 /src/BACKUPS
 /include/mnist.csv
+*.csv
