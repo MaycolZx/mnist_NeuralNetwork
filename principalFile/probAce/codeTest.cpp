@@ -206,7 +206,7 @@ int multiplicarMatrices(std::vector<std::vector<float>> &matriz1,
   return 1;
 }
 
-void vamosAcrearVector() {
+void codeTestProbamos() {
   // std::ifstream archivo("E:\\DOWNLOAD\\mnist.csv");//Descomentar de estas en
   // window y cambiar de direccion
   // vector<vector<float>> valoresRpesos = vectoresRandomPesos();
@@ -278,6 +278,6 @@ float costDif(int valorDeseado) {
 }
 
 int main() {
-  vamosAcrearVector();
+  codeTestProbamos();
   return 0;
 }
