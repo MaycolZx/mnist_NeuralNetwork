@@ -250,20 +250,6 @@ multiplicarMatrices(std::vector<std::vector<float>> &matriz1,
   return valorTmpR;
 }
 
-void agregarNumeroCSV(const std::string &nombreArchivo, float numero) {
-  // Abrir el archivo en modo de añadir (append)
-  std::ofstream archivo(nombreArchivo, std::ios::app);
-  // Comprobar si el archivo se abrió correctamente
-  if (!archivo.is_open()) {
-    std::cerr << "Error al abrir el archivo " << nombreArchivo << std::endl;
-    return;
-  }
-  // Escribir el número en el archivo seguido de una nueva línea
-  archivo << numero << std::endl;
-  // Cerrar el archivo
-  archivo.close();
-}
-
 void vamosAcrearVector() {
   // std::ifstream archivo("E:\\DOWNLOAD\\mnist.csv");//Descomentar de estas en
   // window y cambiar de direccion
@@ -363,10 +349,6 @@ int main() {
     vamosAcrearVector();
     contadorATMP++;
   }
-  std::string nombreArchivo = "generacionesLvlPrec.csv";
-  float numero = 0.70f;
-
-  agregarNumeroCSV(nombreArchivo, numero);
   // for (int indexCsv = 0; indexCsv < 5; indexCsv++) {
   //   numerosInput = vamosAcrearVector(indexCsv);
   //   cout << "El tamano del vector es: " << numerosInput.size() << endl;
