@@ -1,4 +1,4 @@
-# IA_Prof_Anch_Hill_A
+# Red Neuronal Perceptron
 
 ## Integrantes:
 - MAYCOL ALEXANDER CANAVERI TACO
